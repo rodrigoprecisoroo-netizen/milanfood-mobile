@@ -44,6 +44,8 @@ body {
   font-size: 1.5rem;
   cursor: pointer;
   margin-left: 0.5rem;
+  /* Mostrar el ícono en blanco para contrastar con el fondo rosa */
+  color: #ffffff;
 }
 
 .cart-count {
@@ -222,6 +224,58 @@ body {
   padding: 1rem;
   max-height: 90vh;
   overflow-y: auto;
+}
+
+/* Formularios dentro de modales (cliente y checkout) */
+#client-modal label,
+#client-modal input,
+#client-modal textarea,
+#client-modal select {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+#client-modal label {
+  margin-bottom: 0.5rem;
+}
+
+#client-modal input,
+#client-modal textarea {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 0.8rem;
+}
+
+#client-modal .summary-checkout {
+  margin-top: 1rem;
+  border-top: 1px solid #eee;
+  padding-top: 1rem;
+}
+
+#client-modal .summary-checkout .summary-row {
+  margin-bottom: 0.4rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+#client-modal .cart-actions {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Botones dentro del modal de cliente ocupan toda la anchura en móvil */
+@media (max-width: 600px) {
+  #client-modal .cart-actions button {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+  #client-modal .cart-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
 }
 
 .modal-close {

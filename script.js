@@ -521,7 +521,6 @@ function renderCartModal() {
 function openClientModal() {
   // Resetear campos del formulario
   document.getElementById('modal-customer-name').value = '';
-  document.getElementById('modal-customer-lastname').value = '';
   document.getElementById('modal-customer-phone').value = '';
   document.getElementById('modal-customer-street').value = '';
   document.getElementById('modal-customer-town').value = '';
@@ -557,41 +556,44 @@ function hidePaymentModal() {
  * Valida los campos del formulario de datos del cliente.
  */
 function validateClientForm() {
-  const name = document.getElementById('modal-customer-name');
-  const lastname = document.getElementById('modal-customer-lastname');
+  const nameField = document.getElementById('modal-customer-name');
   const phone = document.getElementById('modal-customer-phone');
   const street = document.getElementById('modal-customer-street');
   const town = document.getElementById('modal-customer-town');
   const number = document.getElementById('modal-customer-number');
-  const nameRegex = /^[A-Za-zÁÉÍÓÚÑáéíóúñ\s]{2,}$/;
+  // Regex para validar nombre y apellido: sólo letras y espacios, mínimo dos palabras
+  const fullNameRegex = /^[A-Za-zÁÉÍÓÚÑáéíóúñ\s]{2,}$/;
   const phoneRegex = /^[0-9+\-\s]{7,15}$/;
-  if (!name.value || !nameRegex.test(name.value.trim())) {
-    alert('Ingresa un nombre válido.');
-    name.focus();
+  const streetRegex = /^[A-Za-zÁÉÍÓÚÑáéíóúñ\s]+$/;
+  const numberRegex = /^[0-9]+$/;
+  // Validar nombre completo
+  const fullName = nameField.value.trim();
+  if (!fullName || !fullNameRegex.test(fullName) || fullName.split(/\s+/).length < 2) {
+    alert('Ingresa tu nombre y apellido completos (solo letras).');
+    nameField.focus();
     return false;
   }
-  if (!lastname.value || !nameRegex.test(lastname.value.trim())) {
-    alert('Ingresa apellidos válidos.');
-    lastname.focus();
-    return false;
-  }
+  // Validar teléfono
   if (!phone.value || !phoneRegex.test(phone.value.trim())) {
     alert('Ingresa un teléfono válido.');
     phone.focus();
     return false;
   }
-  if (!street.value.trim()) {
-    alert('Ingresa la calle.');
+  // Validar calle: sólo letras y espacios
+  if (!street.value.trim() || !streetRegex.test(street.value.trim())) {
+    alert('Ingresa la calle (solo letras).');
     street.focus();
     return false;
   }
+  // Validar población
   if (!town.value.trim()) {
     alert('Ingresa la población.');
     town.focus();
     return false;
   }
-  if (!number.value.trim()) {
-    alert('Ingresa el número de casa/departamento.');
+  // Validar número de casa/depto: sólo dígitos
+  if (!number.value.trim() || !numberRegex.test(number.value.trim())) {
+    alert('Ingresa un número de casa/departamento válido (solo números).');
     number.focus();
     return false;
   }
@@ -623,9 +625,8 @@ function updateClientSummary(coupon) {
  */
 function confirmOrderModal(method) {
   if (!validateClientForm()) return;
-  const name = document.getElementById('modal-customer-name').value.trim();
-  const lastname = document.getElementById('modal-customer-lastname').value.trim();
-  alert('¡Pedido realizado! Gracias, ' + name + ' ' + lastname + '.');
+  const fullName = document.getElementById('modal-customer-name').value.trim();
+  alert('¡Pedido realizado! Gracias, ' + fullName + '.');
   // Vaciar el carrito y actualizar contador
   cart.length = 0;
   updateCartCount();
@@ -648,6 +649,10 @@ function confirmOrderModal(method) {
 function renderCart() {
   const cartSection = document.getElementById('cart-section');
   const itemsContainer = document.getElementById('cart-items');
+  // Si no hay sección clásica de carrito, salir. Todo se gestiona en modales.
+  if (!cartSection || !itemsContainer) {
+    return;
+  }
   itemsContainer.innerHTML = '';
   if (cart.length === 0) {
     cartSection.style.display = 'none';
@@ -751,21 +756,16 @@ function updateCheckoutSummary(coupon) {
  */
 function validateCheckoutForm() {
   const name = document.getElementById('customer-name');
-  const lastname = document.getElementById('customer-lastname');
   const phone = document.getElementById('customer-phone');
   const street = document.getElementById('customer-street');
   const town = document.getElementById('customer-town');
   const number = document.getElementById('customer-number');
   const nameRegex = /^[A-Za-zÁÉÍÓÚÑáéíóúñ\s]{2,}$/;
   const phoneRegex = /^[0-9+\-\s]{7,15}$/;
-  if (!name.value || !nameRegex.test(name.value.trim())) {
-    alert('Ingresa un nombre válido.');
+  // Validar nombre completo: mínimo dos palabras
+  if (!name.value || !nameRegex.test(name.value.trim()) || name.value.trim().split(/\s+/).length < 2) {
+    alert('Ingresa tu nombre y apellido completos (solo letras).');
     name.focus();
-    return false;
-  }
-  if (!lastname.value || !nameRegex.test(lastname.value.trim())) {
-    alert('Ingresa apellidos válidos.');
-    lastname.focus();
     return false;
   }
   if (!phone.value || !phoneRegex.test(phone.value.trim())) {
@@ -773,8 +773,10 @@ function validateCheckoutForm() {
     phone.focus();
     return false;
   }
-  if (!street.value.trim()) {
-    alert('Ingresa la calle.');
+  // Calle sólo letras y espacios
+  const streetRegex = /^[A-Za-zÁÉÍÓÚÑáéíóúñ\s]+$/;
+  if (!street.value.trim() || !streetRegex.test(street.value.trim())) {
+    alert('Ingresa la calle (solo letras).');
     street.focus();
     return false;
   }
@@ -783,8 +785,10 @@ function validateCheckoutForm() {
     town.focus();
     return false;
   }
-  if (!number.value.trim()) {
-    alert('Ingresa el número de casa/departamento.');
+  // Número de casa debe ser solo dígitos
+  const numberRegex = /^[0-9]+$/;
+  if (!number.value.trim() || !numberRegex.test(number.value.trim())) {
+    alert('Ingresa un número de casa/departamento válido (solo números).');
     number.focus();
     return false;
   }
@@ -795,17 +799,24 @@ function validateCheckoutForm() {
  * Muestra la sección de checkout.
  */
 function showCheckoutSection() {
-  document.getElementById('cart-section').style.display = 'none';
-  document.getElementById('checkout-section').style.display = 'block';
-  updateCheckoutSummary(document.getElementById('coupon-code').value);
+  const cartSection = document.getElementById('cart-section');
+  const checkoutSection = document.getElementById('checkout-section');
+  if (cartSection) cartSection.style.display = 'none';
+  if (checkoutSection) {
+    checkoutSection.style.display = 'block';
+    const couponInput = document.getElementById('coupon-code');
+    updateCheckoutSummary(couponInput ? couponInput.value : '');
+  }
 }
 
 /**
  * Cancela el checkout y regresa al carrito.
  */
 function cancelCheckout() {
-  document.getElementById('checkout-section').style.display = 'none';
-  document.getElementById('cart-section').style.display = 'block';
+  const checkoutSection = document.getElementById('checkout-section');
+  const cartSection = document.getElementById('cart-section');
+  if (checkoutSection) checkoutSection.style.display = 'none';
+  if (cartSection) cartSection.style.display = 'block';
 }
 
 /**
@@ -814,13 +825,13 @@ function cancelCheckout() {
 function confirmOrder() {
   if (!validateCheckoutForm()) return;
   // Guardar datos del cliente si se desea (para la demo no se persiste)
-  const name = document.getElementById('customer-name').value.trim();
-  const lastname = document.getElementById('customer-lastname').value.trim();
-  alert('¡Pedido realizado! Gracias, ' + name + ' ' + lastname + '.');
+  const fullName = document.getElementById('customer-name').value.trim();
+  alert('¡Pedido realizado! Gracias, ' + fullName + '.');
   // Vaciar el carrito y reiniciar
   cart.length = 0;
   renderCart();
-  document.getElementById('checkout-section').style.display = 'none';
+  const checkoutSection = document.getElementById('checkout-section');
+  if (checkoutSection) checkoutSection.style.display = 'none';
   // Mostrar progreso del pedido
   showOrderProgress();
 }
@@ -830,10 +841,14 @@ function confirmOrder() {
  */
 function showOrderProgress() {
   // Ocultar contenido principal
-  document.getElementById('category-nav').style.display = 'none';
-  document.getElementById('product-container').style.display = 'none';
-  document.getElementById('cart-section').style.display = 'none';
-  document.getElementById('checkout-section').style.display = 'none';
+  const nav = document.getElementById('category-nav');
+  const container = document.getElementById('product-container');
+  const cartSection = document.getElementById('cart-section');
+  const checkoutSection = document.getElementById('checkout-section');
+  if (nav) nav.style.display = 'none';
+  if (container) container.style.display = 'none';
+  if (cartSection) cartSection.style.display = 'none';
+  if (checkoutSection) checkoutSection.style.display = 'none';
   // Mostrar progreso
   const progressSection = document.getElementById('order-progress');
   progressSection.style.display = 'block';

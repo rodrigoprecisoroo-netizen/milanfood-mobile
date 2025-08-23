@@ -29,42 +29,8 @@
     <!-- Cada categoría tendrá su propia sección con productos -->
   </div>
 
-  <!-- Sección del carrito de compras -->
-  <section class="cart-section" id="cart-section" style="display:none;">
-    <h3>Tu carrito</h3>
-    <div class="cart-items" id="cart-items"></div>
-    <div class="cart-summary">
-      <div class="summary-row"><span>Envío:</span><span id="delivery-amount">$0</span></div>
-      <div class="summary-row"><span>Descuento:</span><span id="discount-amount">$0</span></div>
-      <div class="summary-row total-row"><strong>Total:</strong><strong id="cart-total">$0</strong></div>
-    </div>
-    <div class="cart-actions">
-      <button id="go-to-checkout" class="primary-btn">Continuar</button>
-    </div>
-  </section>
-
-  <!-- Sección de checkout (datos del cliente y resumen) -->
-  <section class="checkout" id="checkout-section" style="display:none;">
-    <h3>Datos de entrega</h3>
-    <label>Nombre:<input type="text" id="customer-name"></label>
-    <label>Apellidos:<input type="text" id="customer-lastname"></label>
-    <label>Teléfono:<input type="tel" id="customer-phone"></label>
-    <label>Calle:<input type="text" id="customer-street"></label>
-    <label>Población:<input type="text" id="customer-town"></label>
-    <label>Nº Casa/Depto:<input type="text" id="customer-number"></label>
-    <label>Instrucciones de entrega:<textarea id="delivery-note"></textarea></label>
-    <label>Código de descuento:<input type="text" id="coupon-code" placeholder="Ingresa tu cupón (opcional)"></label>
-    <div class="summary-checkout">
-      <div class="summary-row"><span>Subtotal:</span><span id="checkout-subtotal">$0</span></div>
-      <div class="summary-row"><span>Envío:</span><span id="checkout-delivery">$0</span></div>
-      <div class="summary-row"><span>Descuento:</span><span id="checkout-discount">-$0</span></div>
-      <div class="summary-row total-row"><strong>Total:</strong><strong id="checkout-total">$0</strong></div>
-    </div>
-    <div class="final-btns">
-      <button id="confirm-order" class="primary-btn">Confirmar Pedido</button>
-      <button id="cancel-checkout" class="secondary-btn">Cancelar</button>
-    </div>
-  </section>
+  <!-- Se eliminan las secciones de carrito y checkout clásicas.
+       Toda la interacción de compra se realiza ahora mediante ventanas modales. -->
 
   <!-- Sección de progreso del pedido -->
   <section class="order-progress" id="order-progress" style="display:none;">
@@ -108,8 +74,8 @@
     <div class="modal-content">
       <span class="modal-close" id="close-client">&times;</span>
       <h3>Datos de entrega</h3>
-      <label>Nombre:<input type="text" id="modal-customer-name"></label>
-      <label>Apellidos:<input type="text" id="modal-customer-lastname"></label>
+      <!-- Formulario de datos del cliente en modal: nombre y apellido combinados -->
+      <label>Nombre y Apellido:<input type="text" id="modal-customer-name"></label>
       <label>Teléfono:<input type="tel" id="modal-customer-phone"></label>
       <label>Calle:<input type="text" id="modal-customer-street"></label>
       <label>Población:<input type="text" id="modal-customer-town"></label>
