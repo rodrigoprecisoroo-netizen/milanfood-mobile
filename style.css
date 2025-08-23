@@ -1,0 +1,496 @@
+/* Estilos para la nueva versión de la tienda de pedidos */
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background: #f7f8fa;
+  color: #333;
+}
+
+/* Encabezado principal con buscador y ubicación */
+.main-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  background: #e5006d;
+  color: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.main-header .brand {
+  margin: 0;
+  font-size: 1.4rem;
+}
+
+.search-input {
+  flex: 1;
+  margin: 0 1rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: 4px;
+  border: none;
+  font-size: 1rem;
+}
+
+.location {
+  font-weight: bold;
+}
+
+/* Navegación de categorías */
+.categories {
+  display: flex;
+  overflow-x: auto;
+  white-space: nowrap;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: #fff;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.categories button {
+  flex: 0 0 auto;
+  background: transparent;
+  border: 1px solid #e5006d;
+  color: #e5006d;
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.3s, color 0.3s;
+}
+
+.categories button.active,
+.categories button:hover {
+  background: #e5006d;
+  color: #fff;
+}
+
+/* Contenedor principal */
+.container {
+  max-width: 1024px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+/* Tarjetas de productos */
+/* Secciones por categoría */
+.category-section {
+  margin-top: 2rem;
+}
+
+.category-section h2 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.4rem;
+  color: #333;
+}
+
+.product-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+/* Tarjetas de productos en la nueva versión */
+.product-card {
+  position: relative;
+  flex: 0 0 250px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.product-card:hover {
+  transform: translateY(-3px);
+}
+
+.product-card img {
+  width: 100%;
+  height: 170px;
+  object-fit: cover;
+}
+
+/* Contenedor de información bajo la imagen */
+.product-card .info {
+  padding: 0.5rem;
+}
+
+.product-card .info h3 {
+  margin: 0;
+  font-size: 1rem;
+  color: #333;
+}
+
+.product-card .info .price {
+  font-weight: bold;
+  color: #28a745;
+  margin: 0.25rem 0;
+}
+
+.product-card .info .old-price {
+  text-decoration: line-through;
+  color: #888;
+  font-size: 0.8rem;
+}
+
+/* Badges y overlays */
+.discount-badge {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  background: #dc3545;
+  color: #fff;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: bold;
+}
+
+.rating {
+  position: absolute;
+  bottom: 0.5rem;
+  left: 0.5rem;
+  background: rgba(255,255,255,0.85);
+  padding: 0.1rem 0.3rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.shipping {
+  position: absolute;
+  bottom: 0.5rem;
+  right: 0.5rem;
+  background: rgba(255,255,255,0.85);
+  padding: 0.1rem 0.3rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+}
+
+/* Estilos existentes para el modal */
+
+/* Modal de producto */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  box-sizing: border-box;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  width: 100%;
+  max-width: 500px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  position: relative;
+  padding: 1rem;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #666;
+}
+
+.modal-content img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.modal-content h3 {
+  margin-top: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.modal-content .price {
+  font-weight: bold;
+  color: #28a745;
+  margin-bottom: 0.5rem;
+}
+
+.modal-content .old-price {
+  text-decoration: line-through;
+  color: #888;
+  font-size: 0.9rem;
+}
+
+.options-section, .extras-section, .quantity-section, .note-section {
+  margin-top: 1rem;
+}
+
+.options-section h4, .extras-section h4 {
+  margin: 0 0 0.25rem 0;
+  font-size: 1rem;
+}
+
+.option-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.option-item input {
+  margin-right: 0.5rem;
+}
+
+.quantity-selector {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.quantity-selector button {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: #007bff;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.quantity-selector button:hover {
+  background: #0056b3;
+}
+
+.note-section textarea {
+  width: 100%;
+  min-height: 60px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 0.5rem;
+  resize: vertical;
+}
+
+.modal-actions {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+button.primary {
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+button.secondary {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+button.primary:disabled {
+  background: #aaa;
+  cursor: not-allowed;
+}
+
+/* Botones reutilizables para la nueva interfaz */
+.primary-btn {
+  background: #e5006d;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.2s;
+}
+
+.primary-btn:hover {
+  background: #c40059;
+}
+
+.secondary-btn {
+  background: #6c757d;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.2s;
+}
+
+.secondary-btn:hover {
+  background: #5a6268;
+}
+
+/* Filas de resumen para carrito y checkout */
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.4rem;
+}
+
+.total-row {
+  font-weight: bold;
+}
+
+/* Acciones del carrito */
+.cart-actions {
+  margin-top: 1rem;
+  text-align: right;
+}
+
+/* Progreso del pedido */
+.order-progress {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
+.progress-steps {
+  max-width: 400px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.progress-steps .step {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.progress-steps .step::before {
+  content: '';
+  width: 0.8rem;
+  height: 0.8rem;
+  border-radius: 50%;
+  border: 2px solid #ccc;
+  position: absolute;
+  left: 0;
+  top: 0.2rem;
+}
+
+.progress-steps .step.active::before {
+  background: #28a745;
+  border-color: #28a745;
+}
+
+.progress-steps .step.active {
+  font-weight: bold;
+  color: #28a745;
+}
+
+/* Sección del carrito */
+.cart-section {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
+.cart-section h3 {
+  margin-top: 0;
+}
+
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.5rem;
+}
+
+.cart-item .details {
+  flex: 1;
+}
+
+.cart-item .actions {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.cart-total, .delivery-cost, .discount {
+  margin-top: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.checkout-btn {
+  margin-top: 1rem;
+  text-align: right;
+}
+
+/* Sección de checkout */
+.checkout {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
+.checkout h3 {
+  margin-top: 0;
+}
+
+.checkout label {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.checkout input, .checkout textarea {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.summary-checkout {
+  margin-top: 1rem;
+  border-top: 1px solid #eee;
+  padding-top: 1rem;
+}
+
+.summary-checkout div {
+  margin-bottom: 0.25rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.final-btns {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: space-between;
+}
