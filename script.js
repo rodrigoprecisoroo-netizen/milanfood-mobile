@@ -81,11 +81,17 @@ const cart = [];
 let currentProduct = null;
 let currentSelection = null;
 
+// Elementos de interfaz que se inicializan en DOMContentLoaded
+let cartCountEl;
+
 // Inicializar la página al cargar
 window.addEventListener('DOMContentLoaded', () => {
   renderCategories();
   renderProducts();
   attachEventListeners();
+  // Referencia al contador de carrito
+  cartCountEl = document.getElementById('cart-count');
+  updateCartCount();
 });
 
 /**
@@ -397,6 +403,243 @@ function addProductToCart(product, selection) {
   };
   cart.push(item);
   renderCart();
+  // Actualizar contador del icono de carrito cuando se agrega un producto
+  updateCartCount();
+}
+
+/**
+ * Actualiza el contador del carrito en el icono.
+ */
+function updateCartCount() {
+  if (!cartCountEl) return;
+  const count = cart.reduce((acc, item) => acc + item.quantity, 0);
+  cartCountEl.textContent = count;
+}
+
+/**
+ * Muestra el modal del carrito y actualiza su contenido.
+ */
+function openCartModal() {
+  if (cart.length === 0) {
+    alert('Tu carrito está vacío.');
+    return;
+  }
+  renderCartModal();
+  document.getElementById('cart-modal').style.display = 'flex';
+}
+
+/**
+ * Oculta el modal del carrito.
+ */
+function hideCartModal() {
+  document.getElementById('cart-modal').style.display = 'none';
+}
+
+/**
+ * Genera el contenido del carrito en el modal y calcula importes.
+ */
+function renderCartModal() {
+  const itemsContainer = document.getElementById('cart-items-modal');
+  itemsContainer.innerHTML = '';
+  let subtotal = 0;
+  cart.forEach((item, index) => {
+    const div = document.createElement('div');
+    div.className = 'cart-item';
+    const details = document.createElement('div');
+    details.className = 'details';
+    const name = document.createElement('div');
+    name.textContent = item.name + (item.requiredChoice ? ' (' + item.requiredChoice + ')' : '');
+    details.appendChild(name);
+    if (item.extras && item.extras.length > 0) {
+      const extras = document.createElement('div');
+      extras.style.fontSize = '0.85rem';
+      extras.style.color = '#555';
+      extras.textContent = 'Extras: ' + item.extras.join(', ');
+      details.appendChild(extras);
+    }
+    if (item.note) {
+      const note = document.createElement('div');
+      note.style.fontSize = '0.85rem';
+      note.style.color = '#555';
+      note.textContent = 'Nota: ' + item.note;
+      details.appendChild(note);
+    }
+    const priceLine = document.createElement('div');
+    priceLine.textContent = item.quantity + ' x $' + item.price + ' = $' + (item.price * item.quantity);
+    priceLine.style.fontWeight = 'bold';
+    details.appendChild(priceLine);
+    div.appendChild(details);
+    const actions = document.createElement('div');
+    actions.className = 'actions';
+    const minus = document.createElement('button');
+    minus.textContent = '-';
+    minus.addEventListener('click', () => {
+      if (item.quantity > 1) {
+        item.quantity--;
+      } else {
+        cart.splice(index, 1);
+      }
+      updateCartCount();
+      renderCartModal();
+    });
+    const qtyDisplay = document.createElement('span');
+    qtyDisplay.textContent = item.quantity;
+    const plus = document.createElement('button');
+    plus.textContent = '+';
+    plus.addEventListener('click', () => {
+      item.quantity++;
+      updateCartCount();
+      renderCartModal();
+    });
+    const remove = document.createElement('button');
+    remove.textContent = 'x';
+    remove.addEventListener('click', () => {
+      cart.splice(index, 1);
+      updateCartCount();
+      renderCartModal();
+    });
+    actions.appendChild(minus);
+    actions.appendChild(qtyDisplay);
+    actions.appendChild(plus);
+    actions.appendChild(remove);
+    div.appendChild(actions);
+    itemsContainer.appendChild(div);
+    subtotal += item.price * item.quantity;
+  });
+  // Calcular envío y descuentos
+  let delivery = 2000 + cart.reduce((acc, it) => acc + (it.quantity * 500), 0);
+  let discount = 0;
+  const total = subtotal + delivery - discount;
+  document.getElementById('modal-delivery-amount').textContent = '$' + delivery;
+  document.getElementById('modal-discount-amount').textContent = '$' + discount;
+  document.getElementById('modal-cart-total').textContent = '$' + total;
+}
+
+/**
+ * Muestra el modal de datos del cliente.
+ */
+function openClientModal() {
+  // Resetear campos del formulario
+  document.getElementById('modal-customer-name').value = '';
+  document.getElementById('modal-customer-lastname').value = '';
+  document.getElementById('modal-customer-phone').value = '';
+  document.getElementById('modal-customer-street').value = '';
+  document.getElementById('modal-customer-town').value = '';
+  document.getElementById('modal-customer-number').value = '';
+  document.getElementById('modal-delivery-note').value = '';
+  document.getElementById('modal-coupon-code').value = '';
+  updateClientSummary('');
+  document.getElementById('client-modal').style.display = 'flex';
+}
+
+/**
+ * Oculta el modal de datos del cliente.
+ */
+function hideClientModal() {
+  document.getElementById('client-modal').style.display = 'none';
+}
+
+/**
+ * Muestra el modal de pago.
+ */
+function openPaymentModal() {
+  document.getElementById('payment-modal').style.display = 'flex';
+}
+
+/**
+ * Oculta el modal de pago.
+ */
+function hidePaymentModal() {
+  document.getElementById('payment-modal').style.display = 'none';
+}
+
+/**
+ * Valida los campos del formulario de datos del cliente.
+ */
+function validateClientForm() {
+  const name = document.getElementById('modal-customer-name');
+  const lastname = document.getElementById('modal-customer-lastname');
+  const phone = document.getElementById('modal-customer-phone');
+  const street = document.getElementById('modal-customer-street');
+  const town = document.getElementById('modal-customer-town');
+  const number = document.getElementById('modal-customer-number');
+  const nameRegex = /^[A-Za-zÁÉÍÓÚÑáéíóúñ\s]{2,}$/;
+  const phoneRegex = /^[0-9+\-\s]{7,15}$/;
+  if (!name.value || !nameRegex.test(name.value.trim())) {
+    alert('Ingresa un nombre válido.');
+    name.focus();
+    return false;
+  }
+  if (!lastname.value || !nameRegex.test(lastname.value.trim())) {
+    alert('Ingresa apellidos válidos.');
+    lastname.focus();
+    return false;
+  }
+  if (!phone.value || !phoneRegex.test(phone.value.trim())) {
+    alert('Ingresa un teléfono válido.');
+    phone.focus();
+    return false;
+  }
+  if (!street.value.trim()) {
+    alert('Ingresa la calle.');
+    street.focus();
+    return false;
+  }
+  if (!town.value.trim()) {
+    alert('Ingresa la población.');
+    town.focus();
+    return false;
+  }
+  if (!number.value.trim()) {
+    alert('Ingresa el número de casa/departamento.');
+    number.focus();
+    return false;
+  }
+  return true;
+}
+
+/**
+ * Actualiza el resumen de costos en el modal de cliente.
+ */
+function updateClientSummary(coupon) {
+  let subtotal = 0;
+  cart.forEach(item => {
+    subtotal += item.price * item.quantity;
+  });
+  let delivery = 2000 + cart.reduce((acc, it) => acc + (it.quantity * 500), 0);
+  let discount = 0;
+  if (coupon && coupon.trim().toUpperCase() === 'DESCUENTO10') {
+    discount = Math.round((subtotal + delivery) * 0.10);
+  }
+  const total = subtotal + delivery - discount;
+  document.getElementById('modal-checkout-subtotal').textContent = '$' + subtotal;
+  document.getElementById('modal-checkout-delivery').textContent = '$' + delivery;
+  document.getElementById('modal-checkout-discount').textContent = '-$' + discount;
+  document.getElementById('modal-checkout-total').textContent = '$' + total;
+}
+
+/**
+ * Confirma la orden desde el flujo de modales.
+ */
+function confirmOrderModal(method) {
+  if (!validateClientForm()) return;
+  const name = document.getElementById('modal-customer-name').value.trim();
+  const lastname = document.getElementById('modal-customer-lastname').value.trim();
+  alert('¡Pedido realizado! Gracias, ' + name + ' ' + lastname + '.');
+  // Vaciar el carrito y actualizar contador
+  cart.length = 0;
+  updateCartCount();
+  // Ocultar modales
+  hidePaymentModal();
+  hideClientModal();
+  hideCartModal();
+  closeModal();
+  // Asegurarse de ocultar secciones
+  document.getElementById('cart-section').style.display = 'none';
+  document.getElementById('checkout-section').style.display = 'none';
+  renderCart();
+  // Mostrar progreso del pedido
+  showOrderProgress();
 }
 
 /**
@@ -616,19 +859,66 @@ function showOrderProgress() {
 function attachEventListeners() {
   // Cerrar modal
   document.getElementById('modal-close').addEventListener('click', closeModal);
-  // Navegar al checkout desde el carrito
-  document.getElementById('go-to-checkout').addEventListener('click', () => {
-    if (cart.length === 0) return;
-    showCheckoutSection();
+  // El icono del carrito abre el modal del carrito
+  document.getElementById('cart-icon').addEventListener('click', openCartModal);
+  // Cerrar y cancelar carrito
+  document.getElementById('close-cart').addEventListener('click', hideCartModal);
+  document.getElementById('cancel-cart').addEventListener('click', hideCartModal);
+  // Continuar desde el carrito al formulario de cliente
+  document.getElementById('continue-to-client').addEventListener('click', () => {
+    hideCartModal();
+    openClientModal();
   });
+  // Cerrar o cancelar el formulario de cliente
+  document.getElementById('close-client').addEventListener('click', hideClientModal);
+  document.getElementById('cancel-client').addEventListener('click', hideClientModal);
+  // Continuar desde el formulario de cliente al pago
+  document.getElementById('continue-to-payment').addEventListener('click', () => {
+    if (validateClientForm()) {
+      hideClientModal();
+      openPaymentModal();
+    }
+  });
+  // Actualizar resumen en el modal de cliente al cambiar el cupón
+  document.getElementById('modal-coupon-code').addEventListener('input', (e) => {
+    updateClientSummary(e.target.value);
+  });
+  // Cerrar o cancelar modal de pago
+  document.getElementById('close-payment').addEventListener('click', hidePaymentModal);
+  document.getElementById('cancel-payment').addEventListener('click', hidePaymentModal);
+  // Selección de método de pago
+  document.getElementById('payment-cash').addEventListener('click', () => {
+    confirmOrderModal('cash');
+  });
+  document.getElementById('payment-card').addEventListener('click', () => {
+    confirmOrderModal('card');
+  });
+  // Eventos originales para checkout se mantienen ocultos, pero podrían usarse
+  // Navegar al checkout desde el carrito (sección clásica)
+  const goToCheckoutBtn = document.getElementById('go-to-checkout');
+  if (goToCheckoutBtn) {
+    goToCheckoutBtn.addEventListener('click', () => {
+      if (cart.length === 0) return;
+      showCheckoutSection();
+    });
+  }
   // Cancelar checkout
-  document.getElementById('cancel-checkout').addEventListener('click', cancelCheckout);
+  const cancelCheckoutBtn = document.getElementById('cancel-checkout');
+  if (cancelCheckoutBtn) {
+    cancelCheckoutBtn.addEventListener('click', cancelCheckout);
+  }
   // Confirmar pedido
-  document.getElementById('confirm-order').addEventListener('click', confirmOrder);
-  // Recalcular resumen al ingresar cupón
-  document.getElementById('coupon-code').addEventListener('input', (e) => {
-    updateCheckoutSummary(e.target.value);
-  });
+  const confirmOrderBtn = document.getElementById('confirm-order');
+  if (confirmOrderBtn) {
+    confirmOrderBtn.addEventListener('click', confirmOrder);
+  }
+  // Recalcular resumen en checkout clásico
+  const couponInput = document.getElementById('coupon-code');
+  if (couponInput) {
+    couponInput.addEventListener('input', (e) => {
+      updateCheckoutSummary(e.target.value);
+    });
+  }
   // Buscar productos
   document.getElementById('search-input').addEventListener('input', (e) => {
     renderProducts(e.target.value);

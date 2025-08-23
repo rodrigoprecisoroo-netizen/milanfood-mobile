@@ -38,6 +38,27 @@ body {
   font-weight: bold;
 }
 
+/* Icono de carrito en la cabecera */
+.cart-icon {
+  position: relative;
+  font-size: 1.5rem;
+  cursor: pointer;
+  margin-left: 0.5rem;
+}
+
+.cart-count {
+  position: absolute;
+  top: -0.4rem;
+  right: -0.6rem;
+  background: #dc3545;
+  color: #fff;
+  padding: 0 0.3rem;
+  font-size: 0.6rem;
+  border-radius: 50%;
+  line-height: 1;
+  display: inline-block;
+}
+
 /* Navegación de categorías */
 .categories {
   display: flex;
@@ -349,6 +370,14 @@ button.primary:disabled {
   background: #5a6268;
 }
 
+/* Opciones de pago en el modal de pago */
+.payment-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
 /* Filas de resumen para carrito y checkout */
 .summary-row {
   display: flex;
@@ -523,6 +552,16 @@ button.primary:disabled {
   .location {
     font-size: 0.9rem;
     margin-bottom: 0.3rem;
+  }
+
+  /* Ajustes de icono de carrito en móvil */
+  .cart-icon {
+    font-size: 1.2rem;
+  }
+  .cart-count {
+    font-size: 0.55rem;
+    top: -0.3rem;
+    right: -0.5rem;
   }
 
   /* Compress category buttons for mobile */

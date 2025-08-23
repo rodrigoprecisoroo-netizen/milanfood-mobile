@@ -7,11 +7,16 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Encabezado con buscador y ubicación -->
+  <!-- Encabezado con buscador, ubicación y carrito -->
   <header class="main-header">
     <h1 class="brand">Tienda de Pedidos</h1>
     <input type="text" id="search-input" class="search-input" placeholder="Buscar productos...">
-    <span class="location" id="location-display">Santiago</span>
+    <span class="location" id="location-display">Ovalle, Chile</span>
+    <!-- Icono de carrito con contador -->
+    <div id="cart-icon" class="cart-icon">
+      <span id="cart-count" class="cart-count">0</span>
+      🛒
+    </div>
   </header>
 
   <!-- Navegación de categorías -->
@@ -77,6 +82,65 @@
     <div class="modal-content">
       <span class="modal-close" id="modal-close">&times;</span>
       <div id="modal-body"></div>
+    </div>
+  </div>
+
+  <!-- Modal para el carrito -->
+  <div class="modal" id="cart-modal">
+    <div class="modal-content">
+      <span class="modal-close" id="close-cart">&times;</span>
+      <h3>Tu carrito</h3>
+      <div id="cart-items-modal"></div>
+      <div class="cart-summary">
+        <div class="summary-row"><span>Envío:</span><span id="modal-delivery-amount">$0</span></div>
+        <div class="summary-row"><span>Descuento:</span><span id="modal-discount-amount">$0</span></div>
+        <div class="summary-row total-row"><strong>Total:</strong><strong id="modal-cart-total">$0</strong></div>
+      </div>
+      <div class="cart-actions">
+        <button id="continue-to-client" class="primary-btn">Continuar</button>
+        <button id="cancel-cart" class="secondary-btn">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para datos del cliente -->
+  <div class="modal" id="client-modal">
+    <div class="modal-content">
+      <span class="modal-close" id="close-client">&times;</span>
+      <h3>Datos de entrega</h3>
+      <label>Nombre:<input type="text" id="modal-customer-name"></label>
+      <label>Apellidos:<input type="text" id="modal-customer-lastname"></label>
+      <label>Teléfono:<input type="tel" id="modal-customer-phone"></label>
+      <label>Calle:<input type="text" id="modal-customer-street"></label>
+      <label>Población:<input type="text" id="modal-customer-town"></label>
+      <label>Nº Casa/Depto:<input type="text" id="modal-customer-number"></label>
+      <label>Instrucciones de entrega:<textarea id="modal-delivery-note"></textarea></label>
+      <label>Código de descuento:<input type="text" id="modal-coupon-code" placeholder="Ingresa tu cupón (opcional)"></label>
+      <div class="summary-checkout">
+        <div class="summary-row"><span>Subtotal:</span><span id="modal-checkout-subtotal">$0</span></div>
+        <div class="summary-row"><span>Envío:</span><span id="modal-checkout-delivery">$0</span></div>
+        <div class="summary-row"><span>Descuento:</span><span id="modal-checkout-discount">-$0</span></div>
+        <div class="summary-row total-row"><strong>Total:</strong><strong id="modal-checkout-total">$0</strong></div>
+      </div>
+      <div class="cart-actions">
+        <button id="continue-to-payment" class="primary-btn">Continuar</button>
+        <button id="cancel-client" class="secondary-btn">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para método de pago -->
+  <div class="modal" id="payment-modal">
+    <div class="modal-content">
+      <span class="modal-close" id="close-payment">&times;</span>
+      <h3>Selecciona método de pago</h3>
+      <div class="payment-options">
+        <button id="payment-cash" class="primary-btn">Efectivo</button>
+        <button id="payment-card" class="primary-btn">Tarjeta</button>
+      </div>
+      <div class="cart-actions">
+        <button id="cancel-payment" class="secondary-btn">Cancelar</button>
+      </div>
     </div>
   </div>
 
