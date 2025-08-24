@@ -12,12 +12,18 @@
     <h1 class="brand">Tienda de Pedidos</h1>
     <input type="text" id="search-input" class="search-input" placeholder="Buscar productos...">
     <span class="location" id="location-display">Ovalle, Chile</span>
-    <!-- Icono de carrito con contador -->
-    <div id="cart-icon" class="cart-icon">
+    <!-- Icono de carrito con contador (oculto, se usa la burbuja flotante) -->
+    <div id="cart-icon" class="cart-icon" style="display:none;">
       <span id="cart-count" class="cart-count">0</span>
       🛒
     </div>
   </header>
+
+  <!-- Burbuja flotante del carrito en la esquina inferior derecha -->
+  <div id="floating-cart" class="floating-cart">
+    <img src="images/cart-icon.png" alt="Carrito">
+    <span id="floating-cart-count" class="badge">0</span>
+  </div>
 
   <!-- Navegación de categorías -->
   <nav class="categories" id="category-nav">

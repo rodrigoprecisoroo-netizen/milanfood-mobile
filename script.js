@@ -83,6 +83,8 @@ let currentSelection = null;
 
 // Elementos de interfaz que se inicializan en DOMContentLoaded
 let cartCountEl;
+let floatingCartCountEl;
+let floatingCartEl;
 
 // Inicializar la página al cargar
 window.addEventListener('DOMContentLoaded', () => {
@@ -91,7 +93,13 @@ window.addEventListener('DOMContentLoaded', () => {
   attachEventListeners();
   // Referencia al contador de carrito
   cartCountEl = document.getElementById('cart-count');
+  floatingCartCountEl = document.getElementById('floating-cart-count');
+  floatingCartEl = document.getElementById('floating-cart');
   updateCartCount();
+  // Listener para la burbuja flotante del carrito
+  if (floatingCartEl) {
+    floatingCartEl.addEventListener('click', openCartModal);
+  }
 });
 
 /**
@@ -405,6 +413,8 @@ function addProductToCart(product, selection) {
   renderCart();
   // Actualizar contador del icono de carrito cuando se agrega un producto
   updateCartCount();
+  // Animar la burbuja del carrito
+  triggerCartPulse();
 }
 
 /**
@@ -414,6 +424,22 @@ function updateCartCount() {
   if (!cartCountEl) return;
   const count = cart.reduce((acc, item) => acc + item.quantity, 0);
   cartCountEl.textContent = count;
+  if (floatingCartCountEl) {
+    floatingCartCountEl.textContent = count;
+  }
+}
+
+/**
+ * Añade una animación breve a la burbuja del carrito cuando se añade un producto.
+ */
+function triggerCartPulse() {
+  if (floatingCartEl) {
+    floatingCartEl.classList.add('pulse');
+    // Eliminar la clase después de la animación para poder repetirla
+    setTimeout(() => {
+      floatingCartEl.classList.remove('pulse');
+    }, 400);
+  }
 }
 
 /**
