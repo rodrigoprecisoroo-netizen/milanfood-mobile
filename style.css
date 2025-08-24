@@ -66,10 +66,13 @@ body {
   position: fixed;
   bottom: 1rem;
   right: 1rem;
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  background: #e5006d;
+  /* Increased size for better visibility on mobile screens */
+  width: 64px;
+  height: 64px;
+  /* Apply a rounded rectangle shape instead of a perfect circle */
+  border-radius: 0.75rem;
+  /* Use a darker rose tone that matches the rest of the palette */
+  background: #C84863;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -79,9 +82,14 @@ body {
   color: #fff;
 }
 
+/*
+ * Explicitly size the cart icon within the floating button so that changes
+ * to the container dimensions do not distort the vector artwork. A
+ * fixed pixel size provides consistency across devices.
+ */
 .floating-cart img {
-  width: 60%;
-  height: 60%;
+  width: 32px;
+  height: 32px;
 }
 
 .floating-cart .badge {
